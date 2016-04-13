@@ -1,12 +1,12 @@
 #!/bin/bash
 
-tmp_IFS=$IFS
+#tmp_IFS=$IFS
 IFS=';'
 read -r -a lookup_array <<< "$lookup_files"
-IFS=$tmp_IFS
+#IFS=$tmp_IFS
 error_code=0
 
-mkdir -p ${WORKSPACE}/checkStyleResults
+mkdir -p "${WORKSPACE}/checkStyleResults"
 
 exec_shell_check () {
 	if [[ "$1" != /* ]]
@@ -15,7 +15,7 @@ exec_shell_check () {
 	else
 		f_file=$1
 	fi
-	shellcheck $f_file -f checkstyle > ${WORKSPACE}/checkStyleResults/$(basename $f_file).xml
+	shellcheck "$f_file" -f checkstyle > "${WORKSPACE}/checkStyleResults/$(basename "$f_file").xml"
 	exit_code=$?
 	if [ $exit_code -eq 2 ] || [ $exit_code -eq 3 ] || [ $exit_code -eq 4  ]
 	then
@@ -24,16 +24,17 @@ exec_shell_check () {
 }
 
 function launch_files_check {
-	for lookup_item in ${lookup_array[@]}
+	for lookup_item in "${lookup_array[@]}"
 	do
-		if [ -d $lookup_item ]
+		if [ -d "$lookup_item" ]
 		then
-			for file in $(find ${lookup_item}  -name "*.sh"); do 
-				exec_shell_check $file
-			done
-		elif [ ${lookup_item: -3} == ".sh" ]
+			while IFS= read -r -d '' file
+			do
+				exec_shell_check "$file"
+			done < <(find "$lookup_item" -name "*.sh" -print0)
+		elif [ "${lookup_item: -3}" == ".sh" ]
 		then
-			exec_shell_check $lookup_item
+			exec_shell_check "$lookup_item"
 		fi
 	done
 }
