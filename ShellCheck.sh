@@ -20,6 +20,13 @@ exec_shell_check () {
 		error_code=1
 	else
 		shellcheck "$f_file" -f checkstyle > "${WORKSPACE}/checkStyleResults/$(basename "$f_file").xml"
+		if [ $error_code -ne 1 ]
+		then
+			if (grep -q "severity='error'"  "${WORKSPACE}/checkStyleResults/$(basename "$f_file").xml")
+			then
+				error_code=1
+			fi
+		fi
 	fi
 }
 
