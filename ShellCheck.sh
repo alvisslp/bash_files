@@ -15,11 +15,13 @@ exec_shell_check () {
 	else
 		f_file=$1
 	fi
-	shellcheck "$f_file" -f checkstyle > "${WORKSPACE}/checkStyleResults/$(basename "$f_file").xml"
+	shellcheck "$f_file" > /dev/null
 	exit_code=$?
 	if [ $exit_code -eq 2 ] || [ $exit_code -eq 3 ] || [ $exit_code -eq 4  ]
 	then
 		error_code=1
+	else
+		shellcheck "$f_file" -f checkstyle > "${WORKSPACE}/checkStyleResults/$(basename "$f_file").xml"
 	fi
 }
 
