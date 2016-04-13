@@ -10,9 +10,9 @@ files_list=("${WORKSPACE}")
 mkdir -p "${WORKSPACE}/checkStyleResults"
 
 function f_usage {
-	printf "Script utilisation :\n"i
+	printf "Script utilisation :\n"
 	printf "\t -h | --help  : show help message"
-	printf "\t -d 		: select directory (\".\" by default)\n"
+	printf "\t -d 		: select the source directory (\".\" by default)\n"
 	printf "\t -o 		: use your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\""
 }
 
