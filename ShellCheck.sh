@@ -1,10 +1,20 @@
 #!/bin/bash
 
-IFS=';'
-read -r -a lookup_array <<< "${lookup_files:?}"
 error_code=0
+if ! [ -z "${WORKSPACE+x}" ]
+then
+	WORKSPACE=$PWD
+fi
+files_list=("${WORKSPACE}")
 
 mkdir -p "${WORKSPACE}/checkStyleResults"
+
+function f_usage {
+	printf "Script utilisation :\n"i
+	printf "\t -h | --help  : show help message"
+	printf "\t -d 		: select directory (\".\" by default)\n"
+	printf "\t -o 		: use your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\""
+}
 
 exec_shell_check () {
 	if [[ "$1" != /* ]]
@@ -31,7 +41,7 @@ exec_shell_check () {
 }
 
 function launch_files_check {
-	for lookup_item in "${lookup_array[@]}"
+	for lookup_item in "${files_list[@]}"
 	do
 		if [ -d "$lookup_item" ]
 		then
@@ -45,6 +55,20 @@ function launch_files_check {
 		fi
 	done
 }
+
+while [ $# != 0 ]
+do
+	case $1 in
+		-h|--help) f_usage;
+		    break;;
+		-d) WORKSPACE=($2);
+		    shift 2;;
+	    	-o) shift; files_list=("$@");
+		   break;;
+		*) f_usage;
+		   break;;
+	esac
+done
 
 launch_files_check
 
