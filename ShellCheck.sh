@@ -1,9 +1,7 @@
 #!/bin/bash
 
-#tmp_IFS=$IFS
 IFS=';'
 read -r -a lookup_array <<< "${lookup_files:?}"
-#IFS=$tmp_IFS
 error_code=0
 
 mkdir -p "${WORKSPACE}/checkStyleResults"
