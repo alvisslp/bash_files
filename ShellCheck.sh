@@ -13,7 +13,8 @@ function f_usage {
 	printf "Script utilisation :\n"
 	printf "\t -h | --help  : show help message"
 	printf "\t -d 		: select the source directory (\".\" by default)\n"
-	printf "\t -o 		: use your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\""
+	printf "\t -o 		: use only your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\""
+	printf "\t -a 		: add your own files / dir ( you can type : \"ShellCheck -a file1 file2 dir1 file3 dir2)\""
 }
 
 exec_shell_check () {
@@ -64,7 +65,9 @@ do
 		-d) WORKSPACE=($2);
 		    shift 2;;
 	    	-o) shift; files_list=("$@");
-		   break;;
+		    break;;
+	    	-a) shift; files_list=("${WORKSPACE}" "$@");
+		    break;;
 		*) f_usage;
 		   break;;
 	esac
