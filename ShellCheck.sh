@@ -7,14 +7,12 @@ then
 fi
 files_list=("${WORKSPACE}")
 
-mkdir -p "${WORKSPACE}/checkStyleResults"
-
 function f_usage {
 	printf "Script utilisation :\n"
 	printf "\t -h | --help  : show help message"
 	printf "\t -d 		: select the source directory (\".\" by default)\n"
-	printf "\t -o 		: use only your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\""
-	printf "\t -a 		: add your own files / dir ( you can type : \"ShellCheck -a file1 file2 dir1 file3 dir2)\""
+	printf "\t -o 		: use only your own files / dir ( you can type : \"ShellCheck -o file1 file2 dir1 file3 dir2)\"\n"
+	printf "\t -a 		: add your own files / dir ( you can type : \"ShellCheck -a file1 file2 dir1 file3 dir2)\"\n"
 }
 
 exec_shell_check () {
@@ -57,11 +55,16 @@ function launch_files_check {
 	done
 }
 
+function main {
+	mkdir -p "${WORKSPACE}/checkStyleResults"
+	launch_files_check
+}
+
 while [ $# != 0 ]
 do
 	case $1 in
 		-h|--help) f_usage;
-		    break;;
+		    exit 0;;
 		-d) WORKSPACE=($2);
 		    shift 2;;
 	    	-o) shift; files_list=("$@");
@@ -69,10 +72,10 @@ do
 	    	-a) shift; files_list=("${WORKSPACE}" "$@");
 		    break;;
 		*) f_usage;
-		   break;;
+		   exit 0;;
 	esac
 done
 
-launch_files_check
+main
 
 exit $error_code
