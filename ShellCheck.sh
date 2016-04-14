@@ -1,11 +1,16 @@
 #!/bin/bash
 
-error_code=0
-if ! [ -z "${WORKSPACE+x}" ]
-then
-	WORKSPACE=$PWD
-fi
-files_list=("${WORKSPACE}")
+function init {
+	if ! [ -z "${WORKSPACE+x}" ]
+	then
+		WORKSPACE=$PWD
+	fi
+
+	error_code=0
+	files_list=("${WORKSPACE}")
+
+	mkdir -p "${WORKSPACE}/checkStyleResults"
+}
 
 function f_usage {
 	printf "Script utilisation :\n"
@@ -56,7 +61,7 @@ function launch_files_check {
 }
 
 function main {
-	mkdir -p "${WORKSPACE}/checkStyleResults"
+	init
 	launch_files_check
 }
 
