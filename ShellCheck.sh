@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function init {
-	if ! [ -z "${WORKSPACE+x}" ]
+	if [[ -z "${WORKSPACE}" ]]
 	then
 		WORKSPACE=$PWD
 	fi
@@ -74,7 +74,7 @@ do
 		    shift 2;;
 	    	-o) shift; files_list=("$@");
 		    break;;
-	    	-a) shift; files_list=("${WORKSPACE}" "$@");
+	    	-a) shift; files_list=("${WORKSPACE[@]}" "$@");
 		    break;;
 		*) f_usage;
 		   exit 0;;
